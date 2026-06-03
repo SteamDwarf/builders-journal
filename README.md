@@ -52,6 +52,6 @@ docker compose up --build
 
 ### 3. Ссылки для доступа
 
-Frontend: http://localhost:3000
-Backend API: http://localhost:8000/api
-MySQL: localhost:3306
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000/api
+- MySQL: localhost:3306
