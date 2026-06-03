@@ -12,7 +12,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password
+    # Убрали command с deprecated флагом, так как современные драйверы поддерживают дефолтный caching_sha2_password
     healthcheck:
       test:
         [
@@ -21,13 +21,13 @@ services:
           "ping",
           "-h",
           "localhost",
-          "-u${MYSQL_USER}",
-          "-p${MYSQL_PASSWORD}",
+          "-u$MYSQL_USER",
+          "-p$MYSQL_PASSWORD",
         ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 120s
 
   # --- БЭКЕНД (NestJS + Prisma) ---
   backend:
@@ -42,15 +42,14 @@ services:
       - .env
     environment:
       PORT: ${BACKEND_PORT}
-      # Динамически собираем URL для Prisma, используя переменные из .env
-      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}"
+      # Ссылку DATABASE_URL отсюда убираем, она автоматически и правильно подтянется из .env
     volumes:
       - ./backend:/app
       - /app/node_modules
     command: >
-      sh -c "npx prisma generate && 
-             npx prisma db push && 
-             npx prisma db seed && 
+      sh -c "npx prisma generate --config prisma/prisma.config.ts && 
+             npx prisma db push --config prisma/prisma.config.ts && 
+             npx prisma db seed --config prisma/prisma.config.ts && 
              npm run start:dev"
     depends_on:
       db:
@@ -74,7 +73,8 @@ services:
     stdin_open: true
     tty: true
     depends_on:
-      - backend
+      backend:
+        condition: service_started # Гарантирует, что фронт стартует после запуска бэкенда
 
 volumes:
   mysql_data:
