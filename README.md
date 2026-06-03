@@ -27,21 +27,12 @@
 
 Всё окружение (База данных, Бэкенд и Фронтенд) поднимается в изолированных контейнерах. Понадобятся только установленные **Docker** и **Docker Compose**.
 
-### 1. Клонирование репозитория
-
-```bash
-git clone <url_твоего_репозитория>
-cd builders-journal
-```
-
-### 2. Настройка переменных окружения (.env)
-
+### 1. Настройка переменных окружения (.env)
 В корневой директории проекта создай файл .env:
 
 Фрагмент кода
 
 ```
-
 BACKEND_PORT=5000
 FRONTEND_PORT=5173
 
@@ -49,10 +40,9 @@ MYSQL_ROOT_PASSWORD=root_secure_pass
 MYSQL_DATABASE=worklogs_db
 MYSQL_USER=worklog_user
 MYSQL_PASSWORD=user_secure_pass
-
 ```
 
-### 3. Запуск
+### 2. Запуск
 
 Выполни в корне проекта:
 
@@ -60,7 +50,7 @@ MYSQL_PASSWORD=user_secure_pass
 docker compose up --build
 ```
 
-### 4. Ссылки для доступа
+### 3. Ссылки для доступа
 
 Frontend: http://localhost:3000
 Backend API: http://localhost:8000/api
