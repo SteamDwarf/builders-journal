@@ -41,6 +41,7 @@ MYSQL_ROOT_PASSWORD=root_secure_pass
 MYSQL_DATABASE=worklogs_db
 MYSQL_USER=worklog_user
 MYSQL_PASSWORD=user_secure_pass
+DATABASE_URL=mysql://worklog_user:user_secure_pass@db:3306/worklogs_db
 ```
 
 ### 2. Запуск
