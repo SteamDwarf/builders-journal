@@ -12,7 +12,6 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-    # Убрали command с deprecated флагом, так как современные драйверы поддерживают дефолтный caching_sha2_password
     healthcheck:
       test:
         [
@@ -42,12 +41,12 @@ services:
       - .env
     environment:
       PORT: ${BACKEND_PORT}
-      # Ссылку DATABASE_URL отсюда убираем, она автоматически и правильно подтянется из .env
     volumes:
       - ./backend:/app
       - /app/node_modules
     command: >
-      sh -c "npx prisma generate --config prisma/prisma.config.ts && 
+      sh -c "sleep 5 && 
+             npx prisma generate --config prisma/prisma.config.ts && 
              npx prisma db push --config prisma/prisma.config.ts && 
              npx prisma db seed --config prisma/prisma.config.ts && 
              npm run start:dev"
@@ -64,17 +63,19 @@ services:
     restart: always
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    env_file:
+      - .env
     volumes:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - VITE_API_BASE_URL=http://localhost:${BACKEND_PORT}/api
+      - VITE_API_BASE=http://localhost:${BACKEND_PORT}/api
     command: npm run dev -- --host 0.0.0.0
     stdin_open: true
     tty: true
     depends_on:
       backend:
-        condition: service_started # Гарантирует, что фронт стартует после запуска бэкенда
+        condition: service_started
 
 volumes:
   mysql_data:

@@ -42,6 +42,7 @@ MYSQL_DATABASE=worklogs_db
 MYSQL_USER=worklog_user
 MYSQL_PASSWORD=user_secure_pass
 DATABASE_URL=mysql://worklog_user:user_secure_pass@db:3306/worklogs_db
+VITE_API_BASE=http://localhost:8000/api
 ```
 
 ### 2. Запуск
